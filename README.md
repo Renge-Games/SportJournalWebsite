@@ -26,7 +26,7 @@ Mit XAMPP:
 1. httpd.conf ------------------------------------------------------------------------------------------
  - DocumentRoot Muss in ".../src/" sein
  - Directory direct unter DocumentRoot muss auch ".../src/" sein
- - in <IfModule mime_module> muss noch "AddType application/x-httpd-php .php .html" hinzugefügt werden
+ - in \<IfModule mime_module\> muss noch "AddType application/x-httpd-php .php .html" hinzugefügt werden
 
 2. php.ini ---------------------------------------------------------------------------------------------
  - file_uploads=On
