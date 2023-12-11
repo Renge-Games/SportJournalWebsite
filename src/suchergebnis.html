@@ -1,0 +1,111 @@
+<?php
+    session_start();
+    if(!isset($_SESSION["suche"])){
+        header("Location: http://" . $_SERVER["SERVER_NAME"] . "/erweiterteSuche.html");
+    }
+?>
+<!DOCTYPE html>
+<html lang="de-DE">
+
+<head>
+    <title>Suche</title>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <!-- Wichtig fuer Bootstrap -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="beitragerstellen">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB"
+        crossorigin="anonymous">
+    <!-- Javascript -->
+    <script src="js/responsiveNav.js"></script>
+    <script src="js/orderSearch.js"></script>
+	<script src="js/header.js"></script>
+	<script src="js/ajax.js"></script>
+    <!-- Unsere CSS -->
+    <link rel="stylesheet" type="text/css" href="css/cookieNotification.css">
+    <link rel="stylesheet" type="text/css" href="css/navigation.css">
+    <link rel="stylesheet" type="text/css" href="css/header.css">
+    <link rel="stylesheet" type="text/css" href="css/pagelayout.css">
+    <link rel="stylesheet" type="text/css" href="css/lists.css">
+    <link rel="stylesheet" type="text/css" href="css/suchergebnis.css">
+    <!-- Icons-->
+    <link rel="shortcut icon" type="image/x-icon" href="materials/icons/glyph.png">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp"
+        crossorigin="anonymous">
+</head>
+
+<body onload="setRndBG();" onresize="setRndBG();">
+    <div id="container">
+        <div id="container-main">
+            
+            <header>
+				<a id="headerTitle" onclick="toggleBG()"><span id="headerFirst">Sport</span><span id="headerLast">Journal</span></a>
+            </header>
+            
+            <nav it-include-html="/navigation.html"></nav>
+
+            <table class="orderedList" id="searchResult">
+                <tr>
+                    <th class="orderedListTitle" onclick="toggleOrderByName(this)">Titel</th>
+                    <th class="orderedListAuthor" onclick="toggleOrderByAuthor(this)">Autor</th>
+                    <th class="orderedListKat orderedListResponsive" onclick="toggleOrderByKat(this)">Kategorie</th>
+                    <th class="orderedListDate orderedListResponsive" onclick="toggleOrderByDate(this)">Datum</th>
+                    <th class="orderedListViews orderedListResponsive" onclick="toggleOrderByViews(this)">Views</th>
+                </tr>
+                <?php
+                    $suche = $_SESSION["suche"];
+                    foreach($suche as $zeile){
+                        $autorNamedb = htmlspecialchars($zeile["title"]) . " " . htmlspecialchars($zeile["firstname"]) . " " . htmlspecialchars($zeile["lastname"]);
+                        $blink = "/" . htmlspecialchars($zeile["webpath"]); //TODO: von db holen
+                        $alink = "php/erweiterteSuche.php?autor=" . $autorNamedb;
+                        $datumArr = explode("-", $zeile["date"]);
+                        $dlink = "php/erweiterteSuche.php?datum=" . $datumArr[0] . "-" . $datumArr[1]; // 22[2].06[1].2018[0] -> ?datum=2018-06 
+                        $klink = "/" . htmlspecialchars($zeile["category"]) . ".html";
+                        
+                        echo "<tr>";
+                        echo "<td><a href='" . $blink . "'>" . htmlspecialchars($zeile["name"]) . "</a></td>"; // $b[$d[$i]] -> ersetzen mit db
+                        echo "<td><a href='" . $alink . "'>" . $autorNamedb . "</a></td>";
+                        echo "<td class='orderedListResponsive'><a href='" . $klink . "'>" . htmlspecialchars($zeile["category"]) . "</a></td>";
+                        echo "<td class='orderedListResponsive'><a href='" . $dlink . "'>" . htmlspecialchars($zeile["date"]) . "</a></td>";
+                        echo "<td class='orderedListResponsive'><a href='#'>" . htmlspecialchars($zeile["views"]) . "</a></td>";
+                        echo "</tr>";
+                    }
+                ?>
+            </table>
+
+                <?php
+                    $text = "";
+                    if(count($suche) == 1)
+                        $text = "Es wurde <b> ein </b> Beitrag";
+                    else
+                        $text = "Es wurden <b>" . count($suche) . "</b> Beiträge";
+                    echo "<div style=\"border-top: 4px dashed #c0c0c0;font-size: 1.2em;padding: 25px;margin: auto;width:500px; text-align: center;\"> "
+                    . $text . " gefunden</div>";
+                ?>
+        </div>
+    </div>
+
+    <footer>
+        <div id="footer">
+            <a href="impressum.html">Impressum</a> -
+            <a href="datenschutz.html">Datenschutz</a>
+        </div>
+    </footer>
+
+    <?php
+		if(!isset($_COOKIE["disableCookieNotify"])){
+		echo '<div id="cookieNotification">
+				<div id="cookieNotifyText">Wir verwenden Cookies. Für weitere informationen siehe unser <a href="datenschutz.html">Datenschutz</a>.</div>
+				<div id="cookieNotifyButton" >
+					<form action="/php/notifyCookie.php" method="post">
+						<input type=hidden name="acceptCookie" value="true">
+						<input id="cookieSubmit" type="submit" value="Akzeptieren">
+					</form>
+				</div>
+			</div>';
+		}
+	?>
+
+</body>
+<script>includeHTML();</script>
+</html>

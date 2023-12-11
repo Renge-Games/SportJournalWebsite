@@ -1,0 +1,123 @@
+:root{
+    --mainColor1: #1e656d;
+    --mainColor2: #00293C;
+    --hoverColor1: #26828c;
+    --hoverColor2: #004666;
+    --activeColor1: #164a50;
+    --activeColor2: #002333;
+}
+
+
+#main {
+    margin: 20px 0;
+    z-index: 0;
+}
+
+#main a{
+    text-decoration: none;
+    color: black;
+}
+
+#main ul {
+    list-style-type: none;
+    align-content: left;
+}
+
+#topBeitraege li, #aktuell li, #trending li{
+    margin-bottom: 10px;
+}
+
+.col-12{
+    transition: 0.5s !important;
+}
+
+#topText,
+#aktuellText,
+#trendingText{
+    background: #ffffff;
+    list-style-type: none;
+    font-weight: bold;
+    position: sticky;
+    top: 0;
+    border-radius: 20px;
+    padding: 10px 20px;
+    border: 1px solid #f0f0f0;
+    box-shadow: 0 5px 10px #0000000f;
+    user-select: none;
+}
+
+#topText{
+    background: linear-gradient(to right, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0.9)), url(../materials/img/sport27.jpg) 50% 50% / 100%;
+}
+
+#aktuellText{
+    background: linear-gradient(to right, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0.9)), url(../materials/img/sport25.jpg) 50% 50% / 100%;
+}
+
+#trendingText{
+    background: linear-gradient(to right, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0.9)), url(../materials/img/sport30.jpg) 50% 50% / 100%;
+}
+
+.beitragContainer{
+    border-radius: 10px;
+    padding: 10px;
+    border: 1px solid #f0f0f0;
+    box-shadow: 0 5px 10px #00000020;
+    transition: 0.5s;
+}
+
+.beitragContainer:hover{
+    box-shadow: 0 10px 10px #00000015;
+    border-left: 7px solid #a0a0a0;
+}
+
+.beitragContainer.noContent{
+    color: #505050;
+    text-align: center;
+    padding: 20px;
+}
+
+.beitragContainer.noContent:hover{
+    border: 1px solid #f0f0f0;
+    box-shadow: 0 5px 10px #00000020;
+}
+
+.beitragTitle{
+    text-decoration: underline;
+    margin: 0;
+}
+
+.beitragAutor{
+    margin-top: -10px;
+    margin-bottom: 10px;
+}
+
+.beitragContent{
+    max-width: 700px;
+    text-align: justify;
+    margin-bottom: 20px;
+    overflow: hidden;
+    position: relative;
+    height: 5.3em;
+    z-index: -1;
+}
+
+.beitragContent:after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 70%;
+    height: 1.3em;
+    background: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1) 90%);
+}
+
+.col-lg-3 .beitragContent, .col-lg-3 .abstractTitle{
+    display: none;
+}
+
+@media screen and (max-width: 992px){
+    .col-lg-3 .beitragContent, .col-lg-3 .abstractTitle{
+        display: block;
+    }
+}

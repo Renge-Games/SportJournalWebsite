@@ -1,0 +1,11 @@
+*.iml
+.idea
+.vscode
+.project
+*.db
+*.pdf
+src/journals/*.html
+src/userProfile/
+!src/userProfile/blankProfile.png
+src/sql/*.db
+test.html

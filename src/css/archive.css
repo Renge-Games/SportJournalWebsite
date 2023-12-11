@@ -1,0 +1,60 @@
+:root{
+    --mainColor1: #1e656d;
+    --mainColor2: #00293C;
+    --hoverColor1: #26828c;
+    --hoverColor2: #004666;
+    --activeColor1: #164a50;
+    --activeColor2: #002333;
+}
+
+#title{
+    font-size: 2.5em;
+    margin: 20px 50px 20px 50px;
+    font-weight: bold;
+}
+
+ul.archiv, ul.monate, ul.beitraege{
+    margin: 10px 20px 10px 20px;
+    list-style-type: none;
+}
+
+li.jahr, li.monat, li.beitrag{
+    margin: 10px 0;
+    box-shadow: 1px 2px 5px #00000020;
+    border: 1px solid #f0f0f0;
+    border-left: 4px solid #c0c0c0;
+    border-radius: 20px;
+    padding: 5px 5px 5px 10px;
+    transition: 0.2s;
+}
+
+li.beitrag:hover{
+    border-left: 10px solid #909090;
+    box-shadow: 2px 5px 8px #00000018;
+}
+
+div.jahrText{
+    font-weight: bold;
+    font-size: 2em;
+    border-bottom: 4px solid #c0c0c0;
+}
+
+div.monatText{
+    font-weight: bold;
+    font-size: 1.5em;
+}
+
+a{
+    text-decoration: none;
+    color: black;
+}
+
+a:hover{
+    text-decoration: none;
+    color: black;
+}
+
+a .autor{
+    color: #a0a0a0;
+    display: inline-block;
+}

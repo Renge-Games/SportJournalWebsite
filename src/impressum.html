@@ -1,0 +1,95 @@
+<?php
+    session_start();
+?>
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Impressum</title>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <!-- Wichtig fuer Bootstrap -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="impressum">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB"
+        crossorigin="anonymous">
+    <!-- Javascript -->
+    <script src="js/responsiveNav.js"></script>
+	<script src="js/header.js"></script>
+	<script src="js/ajax.js"></script>
+    <!-- Unsere CSS -->
+    <link rel="stylesheet" type="text/css" href="css/cookieNotification.css">
+    <link rel="stylesheet" type="text/css" href="css/navigation.css">
+    <link rel="stylesheet" type="text/css" href="css/header.css">
+    <link rel="stylesheet" type="text/css" href="css/pagelayout.css">
+    <link rel="stylesheet" type="text/css" href="css/impressum.css">
+    <!-- Icons-->
+    <link rel="shortcut icon" type="image/x-icon" href="materials/icons/glyph.png">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp"
+        crossorigin="anonymous">
+</head>
+
+<body onload="setRndBG();" onresize="setRndBG();">
+    <div id="container">
+        <div id="container-main">
+
+            <header>
+				<a id="headerTitle" onclick="toggleBG()"><span id="headerFirst">Sport</span><span id="headerLast">Journal</span></a>
+			</header>
+
+            <nav it-include-html="/navigation.html"></nav>
+
+            <section>
+                <div id="main">
+                    <h2>Urheberrecht</h2>
+                    <p>
+                        Die durch die Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten unterliegen dem deutschen Urheberrecht. Die
+                        Vervielfältigung, Bearbeitung, Verbreitung und jede Art der Verwertung außerhalb der Grenzen des
+                        Urheberrechtes bed?rfen der schriftlichen Zustimmung des jeweiligen Autors bzw. Erstellers. Downloads
+                        und Kopien dieser Seite sind nur für den privaten, nicht kommerziellen Gebrauch gestattet.
+                    </p>
+                    <p>
+                        Soweit die Inhalte auf dieser Seite nicht vom Betreiber erstellt wurden, werden die Urheberrechte Dritter beachtet. Insbesondere
+                        werden Inhalte Dritter als solche gekennzeichnet. Sollten Sie trotzdem auf eine Urheberrechtsverletzung
+                        aufmerksam werden, bitten wir um einen entsprechenden Hinweis.Bei Bekanntwerden von Rechtsverletzungen
+                        werden wir derartige Inhalte umgehend entfernen.
+                    </p>
+                    <p>Quelle:
+                        <a href="https://www.e-recht24.de">e-recht24.de</a>
+                    </p>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <footer>
+        <div id="footer">
+            <a href="impressum.html">Impressum</a> -
+            <a href="datenschutz.html">Datenschutz</a>
+        </div>
+    </footer>
+
+    <?php
+		if(!isset($_COOKIE["disableCookieNotify"])){
+		echo '<div id="cookieNotification">
+				<div id="cookieNotifyText">Wir verwenden Cookies. Für weitere informationen siehe unser <a href="datenschutz.html">Datenschutz</a>.</div>
+				<div id="cookieNotifyButton" >
+					<form action="/php/notifyCookie.php" method="post">
+						<input type=hidden name="acceptCookie" value="true">
+						<input id="cookieSubmit" type="submit" value="Akzeptieren">
+					</form>
+				</div>
+			</div>';
+		}
+	?>
+
+    <!-- Wichtig fuer Bootstrap -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T"
+        crossorigin="anonymous"></script>
+</body>
+<script>includeHTML();</script>
+</html>

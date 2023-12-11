@@ -1,0 +1,47 @@
+:root{
+    --mainColor1: #1e656d;
+    --mainColor2: #00293C;
+    --hoverColor1: #26828c;
+    --hoverColor2: #004666;
+    --activeColor1: #164a50;
+    --activeColor2: #002333;
+}
+
+.orderedList form{
+    height: 41px;
+}
+
+.neueBeitrCheck{
+    color: green;
+    border: none;
+    width: 100%;
+    height: 41px;
+    margin: 0;
+    padding: 0;
+    cursor: pointer;
+    transition: 0.2s;
+    background-color: transparent;
+}
+
+.neueBeitrDel{
+    color: red;
+    border: none;
+    width: 100%;
+    height: 41px;
+    margin: 0;
+    padding: 0;
+    cursor: pointer;
+    transition: 0.2s;
+    background-color: transparent;
+}
+
+.neueBeitrCheck:hover, .neueBeitrDel:Hover{
+    background-color: #505050;
+    color: white;
+    outline: none;
+}
+.neueBeitrCheck:active, .neueBeitrDel:active{
+    background-color: #505050;
+    color: white;
+    outline: none;
+}

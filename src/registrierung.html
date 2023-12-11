@@ -1,0 +1,135 @@
+<?php
+    session_start();
+    if(isset($_SESSION["loggedIn"]) && $_SESSION["loggedIn"] == TRUE){
+        header("Location: http://localhost");
+    }
+?>
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Registrierung</title>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <!-- Wichtig fuer Bootstrap -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="registry">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB"
+        crossorigin="anonymous">
+    <!-- Javascript -->
+    <script src="js/responsiveNav.js"></script>
+    <script src="js/registrierung.js"></script>
+    <script src="js/extendedForms.js"></script>
+	<script src="js/header.js"></script>
+	<script src="js/ajax.js"></script>
+    <!-- Unsere CSS -->
+    <link rel="stylesheet" type="text/css" href="css/cookieNotification.css">
+    <link rel="stylesheet" type="text/css" href="css/navigation.css">
+    <link rel="stylesheet" type="text/css" href="css/header.css">
+    <link rel="stylesheet" type="text/css" href="css/pagelayout.css">
+    <link rel="stylesheet" type="text/css" href="css/forms.css">
+    <link rel="stylesheet" type="text/css" href="css/registrierung.css">
+    <!-- Icons-->
+    <link rel="shortcut icon" type="image/x-icon" href="materials/icons/glyph.png">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp"
+        crossorigin="anonymous">
+
+</head>
+
+
+<body onload="setRndBG();" onresize="setRndBG();">
+    <div id="container">
+        <div id="container-main">
+            
+            <header>
+				<a id="headerTitle" onclick="toggleBG()"><span id="headerFirst">Sport</span><span id="headerLast">Journal</span></a>
+			</header>
+
+            <nav it-include-html="/navigation.html"></nav>
+
+            <section class="formContent">
+                <form action="php/registrieren.php" method="Post">
+                    <div class="formTitle">Registrierung</div>
+
+                    <div class="formTextInElement">
+                        <div class="formText">Vorname: </div>
+                        <input class="formInput" id="name" name="vorname" type="text" maxlength="100" required>
+                    </div> 
+                    <div class="formTextInElement">
+                        <div class="formText">Nachname:</div>
+                        <input class="formInput"  id="lastName" name="nachname" type="text" maxlength="100" required>
+                    </div> 
+                    <div class="formTextInElement formDropdownElement1">
+                        <div class="formText">Titel: </div>
+                        <input list="titles" class="formInput" name="titelWahl" onfocus="squDropdown(1)" onblur="rndDropdown(1)">
+                        <datalist id="titles">
+                            <option value="Dr."></option>
+                            <option value="Prof."></option>
+                            <option value="Prof. Dr."></option>
+                            <option value="M. Sc."></option>
+                            <option value="B. Sc."></option>
+                            <option value="M. A."></option>
+                            <option value="B. A."></option>
+                        </datalist>
+                    </div>
+                    <div class="formTextInElement">
+                        <div class="formText">E-Mail:</div>
+                        <input class="formInput"  id="email" name="email" type="email" maxlength="200" required>
+                    </div> 
+                    <div class="formTextInElement">
+                        <div class="formText">Benutzername:</div>
+                        <input class="formInput"  id="nickname" name="benName" type="text" maxlength="30" required>
+                    </div> 
+                    <div class="formTextInElement">
+                        <div class="formText">Passwort:</div>
+                        <input class="formInput"  id="password" name="passwort" type="password" maxlength="20" required>
+                    </div> 
+                    <div class="formTextInElement">
+                        <div class="formText">Passwort bestätigen:</div>
+                        <input class="formInput"  id="passwordbool" name="passwort2" type="password" maxlength="20" required>
+                    </div> 
+                    <div class="formCheckElement">
+                        <input class="formInput" type="checkbox" id="c1" name="bedAkzeptieren" value="Nutzungsbedingungen" required>
+                        <label for="c1" >Akzeptiere <a href="datenschutz.html">Nutzungsbedingungen</a></label>
+                    </div>
+                    <div class="formSubmitElement">
+                        
+                        <input class="formInput"  type="submit" value="Registrieren">
+                    </div> 
+                </form>
+            </section>
+        </div>
+    </div>
+
+    <footer>
+        <div id="footer">
+            <a href="impressum.html">Impressum</a> -
+            <a href="datenschutz.html">Datenschutz</a>
+        </div>
+    </footer>
+
+    <?php
+		if(!isset($_COOKIE["disableCookieNotify"])){
+		echo '<div id="cookieNotification">
+				<div id="cookieNotifyText">Wir verwenden Cookies. Für weitere informationen siehe unser <a href="datenschutz.html">Datenschutz</a>.</div>
+				<div id="cookieNotifyButton" >
+					<form action="/php/notifyCookie.php" method="post">
+						<input type=hidden name="acceptCookie" value="true">
+						<input id="cookieSubmit" type="submit" value="Akzeptieren">
+					</form>
+				</div>
+			</div>';
+		}
+	?>
+
+    <!-- Wichtig fuer Bootstrap -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T"
+        crossorigin="anonymous"></script>
+</body>
+
+<script>includeHTML();</script>
+</html>

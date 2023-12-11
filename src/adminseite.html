@@ -1,0 +1,200 @@
+<?php
+	session_start();
+	if(!isset($_SESSION["admin"]) || $_SESSION["admin"] === FALSE){
+		header("Location: http://" . $_SERVER["SERVER_NAME"] . "/einloggen.html");
+	}
+?>
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Adminseite</title>
+	<meta charset="utf-8">
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
+	<!-- Wichtig fuer Bootstrap -->
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="archive">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB"
+	 crossorigin="anonymous">
+	<!-- Javascript -->
+	<script src="js/responsiveNav.js"></script>
+	<script src="js/orderSearch.js"></script>
+	<script src="js/tabview.js"></script>
+	<script src="js/header.js"></script>
+	<script src="js/ajax.js"></script>
+	<!-- Einbindung von jQuery -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<!-- Unsere CSS -->
+	<link rel="stylesheet" type="text/css" href="css/cookieNotification.css">
+	<link rel="stylesheet" type="text/css" href="css/navigation.css">
+	<link rel="stylesheet" type="text/css" href="css/header.css">
+	<link rel="stylesheet" type="text/css" href="css/pagelayout.css">
+	<link rel="stylesheet" type="text/css" href="css/lists.css">
+	<link rel="stylesheet" type="text/css" href="css/tabview.css">
+	<link rel="stylesheet" type="text/css" href="css/adminseite.css">
+	<!-- Icons-->
+	<link rel="shortcut icon" type="image/x-icon" href="materials/icons/glyph.png">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp"
+	 crossorigin="anonymous">
+
+</head>
+
+<body onload="setRndBG();hideAllUnactive();adminRefresh();" onresize="setRndBG();">
+	<div id="container">
+		<div id="container-main">
+			<header>
+				<a id="headerTitle" onclick="toggleBG()"><span id="headerFirst">Sport</span><span id="headerLast">Journal</span></a>
+			</header>
+
+			<nav it-include-html="/navigation.html"></nav>
+
+			<?php
+				////
+				////	Spaghetti
+				////
+
+				//wenn noch keine anfrage getätigt, suche nach neuen beiträgen und zeige an: "Neu" tab
+				if(!isset($_SESSION["adminSuche"])){//suche nach nicht bestätigten dateien
+					header("Location: http://" . $_SERVER["SERVER_NAME"] . "/php/erweiterteSuche.php?approved=false");
+				}
+
+				//generiere tabs und setze aktiven tab auf selected -> informationen zu tabs in tabview.css und tabview.js
+				$neu = "";
+				$accepted = "";
+				$users = "";
+
+				$viewName = "view1";
+				$idName = "neueBeitraege";
+
+				echo '<div class="tabView"><div class="before"></div>';
+				if(isset($_SESSION["adminSuche"]) && $_SESSION["adminSuche"] == "user"){
+					$users = "selected";
+					$viewName = "view3";
+					$idName = "alleNutzer";
+				}
+				else if(isset($_SESSION["adminSuche"]) && $_SESSION["adminSuche"] == "true"){
+					$accepted = "selected";
+					$viewName = "view2";
+					$idName = "akzeptierteBeitraege";
+				}else{ //adminSuche == false, "" oder alles andere
+					$neu = "selected";
+				}
+
+				//tabs erstellen
+				echo '<div class="button ' . $neu . ' view1" id="Neu" onclick="location.href=\'php/erweiterteSuche.php?approved=false\'">Neu</div>
+					<div class="button ' . $accepted . ' view2" id="Bestaetigt" onclick="location.href=\'php/erweiterteSuche.php?approved=true\'">Bestätigt</div>
+					<div class="button ' . $users . ' view3" id="Nutzer" onclick="location.href=\'php/erweiterteSuche.php?approved=user\'">Nutzer</div>';
+				echo '<div class="after"></div></div>';
+
+				//table anfang
+				echo "<table class=\"$viewName orderedList\" id=\"$idName\">";
+				
+				//spalten erstellen
+				echo "<tr>";
+				if($_SESSION["adminSuche"] == "user"){
+					echo "<th class=\"orderedListTitle\" onclick=\"toggleOrderByUsername(this)\">Nutzer Name</th>
+					<th class=\"orderedListAuthor orderedListResponsive\" onclick=\"toggleOrderByAuthorName(this)\">Name</th>
+					<th class=\"orderedListKat orderedListResponsive\" onclick=\"toggleOrderByAdmin(this)\">Admin</th>
+					<th>Löschen</th>";
+				}else{
+				echo "<th class=\"orderedListTitle\" onclick=\"toggleOrderByName(this)\">Titel</th>
+					<th class=\"orderedListAuthor orderedListResponsive\" onclick=\"toggleOrderByAuthor(this)\">Autor</th>
+					<th class=\"orderedListKat orderedListResponsive\" onclick=\"toggleOrderByKat(this)\">Kategorie</th>
+					<th class=\"orderedListDate orderedListResponsive\" onclick=\"toggleOrderByDate(this)\">Datum</th>
+					<th class=\"orderedListViews orderedListResponsive\" onclick=\"toggleOrderByViews(this)\">Views</th>";
+				if($_SESSION["adminSuche"] == "false") echo "<th>Annehmen</th>";
+				if($_SESSION["adminSuche"] == "false") echo "<th>Löschen</th>"; else echo "<th>Ablehnen</th>";
+				echo "</tr>";
+				}
+				//nutzer tab
+                $suche = $_SESSION["suche"];
+                foreach($suche as $zeile){
+					if($_SESSION["adminSuche"] == "user"){
+						$autorNamedb = htmlspecialchars($zeile["title"]) . " " . htmlspecialchars($zeile["firstname"]) . " " . htmlspecialchars($zeile["lastname"]);
+                        $alink = "php/erweiterteSuche.php?autor=" . $autorNamedb;
+                        
+                        echo "<tr>";
+                        echo "<td><a href='#'>" . htmlspecialchars($zeile["username"]) . "</a></td>";
+						echo "<td class='orderedListResponsive'><a href='" . $alink . "'>" . $autorNamedb . "</a></td>";
+						
+						//nutzer admin toggle
+						echo "<td width=\"10%\"><form action=\"php/manageUsers.php\" method=\"post\">" . 
+						"<input type=\"hidden\" name=\"nutzerID\" value=\"" . $zeile["id"] . "\">" . 
+							"<input type=\"hidden\" name=\"action\" value=\"toggleMod\">" . 
+							"<input type=\"hidden\" name=\"page\" value=\"" . $_SESSION["adminSuche"] ."\">" . 
+							"<button type=\"submit\" value=\"\""; 
+						if($zeile["admin"] == "1") echo "class=\"neueBeitrCheck\"> TRUE </button></form></td>";
+						else echo "class=\"neueBeitrDel\"> FALSE </button></form></td>";
+						//nutzer löschen
+						echo "<td width=\"5%\"><form action=\"php/manageUsers.php\" method=\"post\">" . 
+						"<input type=\"hidden\" name=\"nutzerID\" value=\"" . $zeile["id"] . "\">" . 
+							"<input type=\"hidden\" name=\"action\" value=\"delete\">" . 
+							"<input type=\"hidden\" name=\"page\" value=\"" . $_SESSION["adminSuche"] ."\">" . 
+							"<button type=\"submit\" value=\"\" class=\"neueBeitrDel\"><i class=\"fas fa-times\"></i></button></form></td>";
+						echo "</tr>";
+
+					}else{
+                        $autorNamedb = htmlspecialchars($zeile["title"]) . " " . htmlspecialchars($zeile["firstname"]) . " " . htmlspecialchars($zeile["lastname"]);
+                        $blink = "/" . htmlspecialchars($zeile["webpath"]); //TODO: von db holen
+                        $alink = "php/erweiterteSuche.php?autor=" . $autorNamedb;
+                        $dlink = "php/erweiterteSuche.php?datum=" . $zeile["date"]; // 22[0].06[1].2018[2] -> ?datum=2018-06 
+                        $klink = "/" . htmlspecialchars($zeile["category"]) . ".html";
+                        
+                        echo "<tr>";
+                        echo "<td><a href='" . $blink . "'>" . htmlspecialchars($zeile["name"]) . "</a></td>"; // $b[$d[$i]] -> ersetzen mit db
+                        echo "<td width=\"20%\" class='orderedListResponsive'><a href='" . $alink . "'>" . $autorNamedb . "</a></td>";
+                        echo "<td width=\"10%\" class='orderedListResponsive'><a href='" . $klink . "'>" . htmlspecialchars($zeile["category"]) . "</a></td>";
+                        echo "<td width=\"10%\" class='orderedListResponsive'><a href='" . $dlink . "'>" . htmlspecialchars($zeile["date"]) . "</a></td>";
+                        echo "<td width=\"5%\" class='orderedListResponsive'><a href='#'>" . htmlspecialchars($zeile["views"]) . "</a></td>";;
+						// beitrag annehmen
+						if($_SESSION["adminSuche"] == "false")
+							echo "<td width=\"5%\"><form action=\"php/manageBeitraege.php\" method=\"post\">" . 
+								"<input type=\"hidden\" name=\"beitragId\" value=\"" . $zeile["articleId"] . "\">" . 
+								"<input type=\"hidden\" name=\"beitragAction\" value=\"accept\">" . 
+								"<input type=\"hidden\" name=\"page\" value=\"" . $_SESSION["adminSuche"] . "\">" . 
+								"<button type=\"submit\" value=\"\" class=\"neueBeitrCheck\"><i class=\"fas fa-check\"></i></button></form></td>";
+
+						echo "<td width=\"5%\"><form action=\"php/manageBeitraege.php\" method=\"post\">" . 
+						"<input type=\"hidden\" name=\"beitragId\" value=\"" . $zeile["articleId"] . "\">" . 
+							"<input type=\"hidden\" name=\"beitragAction\" value=\"delete\">" . 
+							"<input type=\"hidden\" name=\"page\" value=\"" . $_SESSION["adminSuche"] ."\">" . 
+							"<button type=\"submit\" value=\"\" class=\"neueBeitrDel\"><i class=\"fas fa-times\"></i></button></form></td>";
+						echo "</tr>";
+					}
+                }
+                ?>
+			</table>
+		</div>
+	</div>
+
+	<footer>
+		<div id="footer">
+			<a href="impressum.html">Impressum</a> -
+			<a href="datenschutz.html">Datenschutz</a>
+		</div>
+	</footer>
+
+	<?php
+		if(!isset($_COOKIE["disableCookieNotify"])){
+		echo '<div id="cookieNotification">
+				<div id="cookieNotifyText">Wir verwenden Cookies. Für weitere informationen siehe unser <a href="datenschutz.html">Datenschutz</a>.</div>
+				<div id="cookieNotifyButton" >
+					<form action="/php/notifyCookie.php" method="post">
+						<input type=hidden name="acceptCookie" value="true">
+						<input id="cookieSubmit" type="submit" value="Akzeptieren">
+					</form>
+				</div>
+			</div>';
+		}
+	?>
+
+	<!-- Wichtig fuer Bootstrap -->
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+	 crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+	 crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T"
+	 crossorigin="anonymous"></script>
+</body>
+<script>includeHTML();</script>
+</html>

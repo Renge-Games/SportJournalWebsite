@@ -1,0 +1,89 @@
+:root{
+    --mainColor1: #1e656d;
+    --mainColor2: #00293C;
+    --hoverColor1: #26828c;
+    --hoverColor2: #004666;
+    --activeColor1: #164a50;
+    --activeColor2: #002333;
+}
+
+.wrapper {
+    position: relative;
+    overflow: auto;
+}
+
+.sidenav {
+    width: 200px;
+    float: left;
+    margin: 0 2% 0 2%;
+}
+
+.mainContent {
+    
+    float: left;
+    width: fit-content;
+}
+
+.positionContent {
+    display: flex;
+    margin: 0 2% 0 0;
+}
+
+.topContent {
+    margin: 2% 2% 2% 2%;
+}
+
+.listThing {
+    color: white;
+    background-color: #00293C;
+    border-bottom: 1px solid #d4d4d4;
+    list-style-type: none;
+    padding: 2px;
+    cursor: pointer;
+}
+
+.listThing:hover {
+    background-color: #084349;
+}
+
+#Beitrag{
+    display: initial;
+}
+
+#Bild,
+#Daten,
+#Delete,
+{
+    display: none;
+}
+
+.titleC{
+    color: white;
+    padding-bottom: 2px;
+    background-color: #084349;
+    margin-left: 20px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.contentC{
+	margin-top: 20px;
+    margin-left: 20px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.beitragList{
+	list-style-type: none;
+}
+
+.beitragList li{
+	padding: 10px;
+}
+
+.beitragList a{
+	color:black;
+}
+.beitragList a:hover{
+	color:black;
+}

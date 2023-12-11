@@ -1,0 +1,51 @@
+:root{
+    --mainColor1: #1e656d;
+    --mainColor2: #00293C;
+    --hoverColor1: #26828c;
+    --hoverColor2: #004666;
+    --activeColor1: #164a50;
+    --activeColor2: #002333;
+}
+
+.registerText{
+    display: inline-block;
+    margin: 30px 0 0 30px;
+    font-size: 1.2em;
+}
+
+.registerText a{
+    text-decoration: none;
+    color: #505050;
+    border: 2px dashed var(--mainColor1);
+    border-radius: 20px;
+    padding: 12px 47px;
+    transition: 0.5s;
+}
+
+.registerText a:hover{
+    background-color: var(--hoverColor1);
+    border-color: var(--hoverColor1);
+    color: white;
+    box-shadow: 0 10px 10px rgba(0,0,0,0.15);
+}
+
+.registerText a:active{
+    background-color: var(--activeColor1);
+    border-color: var(--activeColor1);
+    color: white;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+@media screen and (max-width: 750px){
+    .registerText{
+        width: 100px;
+        margin: auto;
+        font-size: 1em;
+    }
+    
+    .registerText a{
+        border-radius: 20px;
+        padding: 7px 10px;
+        font-weight: bold;
+    }
+}

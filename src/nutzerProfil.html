@@ -1,0 +1,184 @@
+<?php
+	session_start();
+	if (!isset($_SESSION["loggedIn"]) || $_SESSION["loggedIn"] == false) {
+		header("Location: http://localhost/einloggen.html");
+		exit;
+	}
+
+	$db = new PDO("sqlite:sql/webprogrammierung.db");
+	$sql = $db->prepare("SELECT firstname FROM users WHERE username = :username;");
+	$sql->execute([":username" => $_SESSION["usrName"]]);
+	$nameVoll = $sql->fetchColumn();
+?>
+
+<!DOCTYPE html>
+<html lang="de-DE">
+
+<head>
+	<title><?php echo $nameVoll?></title>
+	<meta charset="utf-8">
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
+	<!-- Wichtig fuer Bootstrap -->
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="beitragerstellen">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB"
+	 crossorigin="anonymous">
+	<!-- Javascript -->
+	<script src="js/responsiveNav.js"></script>
+	<script src="js/header.js"></script>
+	<script src="js/nutzerProfil.js"></script>
+	<script src="js/ajax.js"></script>
+	<!-- Unsere CSS -->
+	<link rel="stylesheet" type="text/css" href="css/cookieNotification.css">
+	<link rel="stylesheet" type="text/css" href="css/navigation.css">
+	<link rel="stylesheet" type="text/css" href="css/header.css">
+	<link rel="stylesheet" type="text/css" href="css/pagelayout.css">
+	<link rel="stylesheet" type="text/css" href="css/lists.css">
+	<link rel="stylesheet" type="text/css" href="css/nutzerprofil.css">
+	<link rel="stylesheet" type="text/css" href="css/forms.css">
+	<!-- Icons-->
+	<link rel="shortcut icon" type="image/x-icon" href="materials/icons/glyph.png">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp"
+	 crossorigin="anonymous">
+</head>
+
+<body onload="setRndBG();" onresize="setRndBG();">
+	<div id="container">
+		<div id="container-main">
+			<header>
+				<a id="headerTitle" onclick="toggleBG()">
+					<span id="headerFirst">Sport</span>
+					<span id="headerLast">Journal</span>
+				</a>
+			</header>
+
+			<nav it-include-html="/navigation.html"></nav>
+
+			<section class="main">
+				<div id="wrapper">
+					<div class="topContent">
+						<h1>Hallo, <?php echo $nameVoll ?></h1>
+					</div>
+					<div class="positionContent">
+						<div class="sidenav">
+							<ul id="sidenavList">
+								<li class="listThing" onclick="styleBeitrag()" id="listBeitrag">Meine Beiträge</li>
+								<li class="listThing" onclick="styleBild()" id="listBild">Profilbild ändern</li>
+								<li class="listThing" onclick="styleDaten()" id="listDaten">Daten ändern</li>
+								<li class="listThing" onclick="styleDelete()" id="listDelete">Profil löschen</li>
+							</ul>
+						</div>
+
+						<div class="mainContent">
+							<div id="Beitrag">
+								<div class="titleC">
+									<h1>Meine Beiträge</h1>
+								</div>
+								<div class="contentC">
+									<?php
+										require "php/queryUsers.php";
+										printBeitraege();
+									?>
+								</div>
+							</div>
+							<div id="Bild">
+								<div class="titleC">
+									<h1>Profilbild hochladen</h1>
+								</div>
+								<div class="contentC">
+									<form action="php/nutzerProfil.php" method="POST" enctype="multipart/form-data">
+										Wähle ein Bild aus:
+										<input type="hidden" name="action" value="foto">
+										<input type="file" name="bildZumHochladen" id="bildZumHochladen">
+										<input type="submit" value="Bild hochladen" name="submit">
+									</form>
+								</div>
+							</div>
+							<div id="Daten">
+								<div class="titleC">
+									<h1>Meine Daten ändern</h1>
+								</div>
+								<div class="contentC">
+									<form action="php/nutzerProfil.php" method="POST">
+										<input type="hidden" name="action" value="update">
+										<div class="elementContainer">
+											<div class="formText">Nutzername:</div>
+											<input class="formInput" id="loginLabel" name="username" type="text"></input>
+										</div>
+										<div class="elementContainer">
+											<div class="formText">Passwort:</div>
+											<input class="formInput" id="passwordLabel" name="password" type="password"></input>
+										</div>
+										<div class="elementContainer">
+											<div class="formText">Vorname:</div>
+											<input class="formInput" id="nameLabel" name="firstname" type="text"></input>
+										</div>
+										<div class="elementContainer">
+											<div class="formText">Nachname:</div>
+											<input class="formInput" id="lastNameLabel" name="lastname" type="text"></input>
+										</div>
+										<div class="elementContainer">
+											<div class="formText">Title:</div>
+											<input class="formInput" id="titleLabel" name="title" type="text"></input>
+										</div>
+
+										<div class="formSubmitElement" style="display: inline-block;margin-top: 20px;">
+											<input class="formInput" type="submit" name="submit" value="Bestätigen">
+										</div>
+									</form>
+								</div>
+							</div>
+							<div id="Delete">
+								<div class="titleC">
+									<h1>Mein Profil löschen</h1>
+								</div>
+								<div class="contentC" id="">
+									<form action="/php/nutzerProfil.php" method="POST">
+										<p>
+											Wenn sie den unteren Knopf drücken, löschen sie NUR ihren Account! Ihre Beiträge bleiben erhalten
+										</p>
+										<div class="formSubmitElement">
+											<input type="hidden" name="action" value="delete">
+											<input class="formInput" type="submit" value="Nur mein Konto Löschen">
+										</div>
+									</form>
+									<form action="/php/nutzerProfil.php" method="POST">
+										<p>
+											Wenn sie den unteren Knopf drücken, löschen sie ihren Account und all Ihre Beiträge!
+										</p>
+										<div class="formSubmitElement">
+											<input type="hidden" name="action" value="deleteAll">
+											<input class="formInput" type="submit" value="Alles Löschen">
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+		</div>
+	</div>
+	<div id="footer">
+		<a href="impressum.html">Impressum</a> -
+		<a href="datenschutz.html">Datenschutz</a>
+	</div>
+
+	<?php
+		if(!isset($_COOKIE["disableCookieNotify"])){
+		echo '<div id="cookieNotification">
+				<div id="cookieNotifyText">Wir verwenden Cookies. Für weitere informationen siehe unser <a href="datenschutz.html">Datenschutz</a>.</div>
+				<div id="cookieNotifyButton" >
+					<form action="/php/notifyCookie.php" method="post">
+						<input type=hidden name="acceptCookie" value="true">
+						<input id="cookieSubmit" type="submit" value="Akzeptieren">
+					</form>
+				</div>
+			</div>';
+		}
+	?>
+
+</body>
+<script>includeHTML();</script>
+
+</html>

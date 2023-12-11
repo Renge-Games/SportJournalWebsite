@@ -1,0 +1,61 @@
+<ul class="navigation" id="jsNav">
+	<li class="rightNav">
+		<a href="javascript:void(0);" class="icon" onclick="makeNavResponsive()">
+			<i class="fas fa-bars"></i>
+		</a>
+	</li>
+	<!-- wenn nutzer eingeloggt, zeige an: profil bild und ausloggen, sonst nur einloggen-->
+	<?php
+session_start();
+if (isset($_SESSION["loggedIn"]) && $_SESSION["loggedIn"] == true) {
+    echo "<li class=\"rightNav\"><a class=\"authorImageContainerNav\" href=\"/nutzerProfil.html\"><div class=\"authorImageNav\" style=\"background: #f0f0f0 url(/";
+
+    $db = new PDO("sqlite:". $_SERVER['DOCUMENT_ROOT']. "/sql/webprogrammierung.db");
+	$db->beginTransaction();
+	$sql = $db->prepare("SELECT imagepath FROM users WHERE username = :username;");
+	$sql->execute([':username' => $_SESSION["usrName"]]);
+	echo $sql->fetchColumn();
+
+	$db->commit();
+
+
+    echo ") no-repeat 50% 50% / 100%;\"></div></a></li>";
+    echo "<li class=\"rightNav\" id=\"loginNav\"><a href=\"/php/logout.php\"><i class=\"fas fa-sign-out-alt\"></i></a></li>";
+} else {
+    echo "<li class=\"rightNav\" id=\"loginNav\"><a href=\"/einloggen.html\"><i class=\"fas fa-sign-in-alt\"></i></a></li>";
+}
+?>
+	<li class="rightNav">
+		<a href="/erweiterteSuche.html">
+			<i class="fas fa-search"></i>
+		</a>
+	</li>
+	<li>
+		<a href="/index.html">
+			<i class="fas fa-home"></i>
+		</a>
+	</li>
+	<li class="dropdown">
+		<a class="dropbtn" href="javascript:void(0);">Kategorien
+			<i class="fas fa-caret-down"></i>
+		</a>
+		<div class="dropdownContent">
+			<a href="/basketball.html">Basketball</a>
+			<a href="/fussball.html">Fussball</a>
+			<a href="/boxen.html">Boxen</a>
+		</div>
+	</li>
+	<li>
+		<a href="/archiv.html">Archiv</a>
+	</li>
+	<?php
+			if (isset($_SESSION["loggedIn"]) && $_SESSION["loggedIn"] == true) {
+    			echo "<li><a href=\"/beitragErstellen.html\">Beitrag Erstellen</a></li>";
+    			if (isset($_SESSION["admin"]) && $_SESSION["admin"] == true) {
+        			echo "<li><a href=\"/adminseite.html\">Verwaltung</a></li>";
+    			}
+			} else {
+    			echo "<li><a href=\"/einloggen.html\">Beitrag Erstellen</a></li>";
+			}
+		?>
+</ul>

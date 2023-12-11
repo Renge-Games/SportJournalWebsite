@@ -1,0 +1,62 @@
+:root{
+    --mainColor1: #1e656d;
+    --mainColor2: #00293C;
+    --hoverColor1: #26828c;
+    --hoverColor2: #004666;
+    --activeColor1: #164a50;
+    --activeColor2: #002333;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body, html {
+    font: 100% "Segoe UI", Verdana;
+    height: 100%;
+
+}
+
+#container {
+    min-height: 100%;
+}
+
+#container-main {
+    min-height: 100%;
+
+    padding-bottom: 35px;
+}
+
+#footer {
+    /*sorgt dafür, dass der footer unten bleibt*/
+    position: relative;
+    margin-top: -35px;
+    height: 35px;
+    clear: both;
+
+    text-align: center;
+    padding: 5px;
+    background-color: #f5f5f5;
+    color: #202020;
+    box-shadow: 0 -1px 10px #c0c0c0;
+
+}
+
+#footer a {
+    color: #202020;
+}
+
+body:before {
+    content: "";
+    height: 100%;
+    float: left;
+    width: 0;
+    margin-top: -32767px;
+    /* thank you Erik J - negate effect of float*/
+}
+
+::selection{
+    background-color: var(--mainColor1);
+    color: #f2f2f2;
+}

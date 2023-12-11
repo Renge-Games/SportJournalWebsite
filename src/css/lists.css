@@ -1,0 +1,72 @@
+:root{
+    --mainColor1: #1e656d;
+    --mainColor2: #00293C;
+    --hoverColor1: #26828c;
+    --hoverColor2: #004666;
+    --activeColor1: #164a50;
+    --activeColor2: #002333;
+}
+
+.orderedList{
+    margin: 20px auto;
+    width: 95%;
+    background-color: #ffffff;
+    border-collapse: collapse;
+}
+
+.orderedList a{
+    color: black;
+    display: block;
+    padding: 10px;
+    transition: 0.2s;
+    text-decoration: none;
+}
+.orderedList a:hover{
+    background-color: #505050;
+    color: white;
+}
+.orderedList a:active{
+    background-color: #404040;
+    color: white;
+}
+
+.orderedList th:first-child{
+    border-radius: 15px 0 0 0;
+}
+.orderedList th:last-child{
+    border-radius: 0 15px 0 0;
+}
+
+.orderedList th:hover{
+    background-color: var(--hoverColor1);
+    cursor: pointer;
+}
+.orderedList th:active{
+    background-color: var(--activeColor1);
+    cursor: pointer;
+}
+
+.orderedList th{
+    padding: 10px;
+    background-color: var(--mainColor1);
+    color: #f9f9f9;
+    user-select: none;
+    transition: 0.2s;
+}
+
+.orderedList tr:nth-child(even){
+    background-color: #f0f0f0;
+}
+.orderedList tr:nth-child(odd){
+    background-color: #ffffff;
+}
+
+@media screen and (max-width: 750px){
+    .orderedListResponsive{
+        display: none;
+    }
+
+    .orderedList th:nth-child(2){
+        border-radius: 0 15px 0 0;
+    }
+}

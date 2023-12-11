@@ -1,0 +1,83 @@
+:root{
+    --mainColor1: #1e656d;
+    --mainColor2: #00293C;
+    --hoverColor1: #26828c;
+    --hoverColor2: #004666;
+    --activeColor1: #164a50;
+    --activeColor2: #002333;
+}
+
+a:link {
+    text-decoration: none;
+}
+
+#main {
+    max-width: 1000px;
+    height: auto;
+    margin: 15px;
+    text-align: justify;
+    padding-bottom: 20px;
+    border-bottom: 4px dashed #d0d0d0;
+}
+
+#beitragContainer {
+    margin: 15px auto;
+}
+
+#abstractTitle {
+    text-align: left;
+    text-decoration: underline;
+}
+
+#dlPDF div {
+    margin-right: 15px;
+}
+
+#author {
+    margin: 0 15px 15px 15px;
+
+}
+
+#authorImage {
+    float: left;
+    position: relative;
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    border: 1px solid #b0b0b0;
+    box-shadow: 1px 1px 10px rgba(0,0,0,0.1);
+    background: #f0f0f0 url(../userProfile/blankProfile.png) no-repeat 50% 50% / 100%;
+
+}
+
+#authorName {
+    position: relative;
+    top: 5px;
+    left: 10px;
+    font-size: 20px;
+    font-weight: 500;
+    color: #353535;
+}
+
+#authorSurName {
+    font-weight: normal;
+}
+
+
+/*  col-mid */
+@media (max-width: 860px) {
+}
+
+/*  col-lg */
+@media (max-width: 992px) {
+}
+
+/*  col-xl */
+@media (min-width: 1200px) {
+
+}
+
+/*  col-xl */
+@media (min-width: 1800px) {
+
+}

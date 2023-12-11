@@ -1,0 +1,162 @@
+<?php
+session_start();
+
+$db = new PDO("sqlite:sql/webprogrammierung.db");
+$db->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+
+$topLM = null;
+$aktuell = null;
+
+try{
+	$db->beginTransaction();
+	$lastMonth = date("n") != "1" ? (int)date("n") - 1 : 12; 
+	$thisYear = date("Y");
+	//top 10 artikel vom letzten monat
+	$sql = "SELECT name, abstract, webpath, title, firstname, lastname FROM articles " . 
+			"LEFT JOIN users ON articles.userID = users.id WHERE status = 'true' AND category = 'Fussball' AND date LIKE '$thisYear-%$lastMonth-%' ORDER BY views Desc Limit 10";
+	$topLM = $db->query($sql)->fetchAll();
+
+	//neue artikel
+	$sql = "SELECT name, abstract, webpath, title, firstname, lastname FROM articles " . 
+			"LEFT JOIN users ON articles.userID = users.id WHERE status = 'true' AND category = 'Fussball' AND date LIKE '$thisYear-%' ORDER BY datetime(date) Desc LIMIT 10";
+	$aktuell = $db->query($sql)->fetchAll();
+
+	$db->commit();
+}catch(PDOException $e){
+}
+?>
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Fussball</title>
+	<meta charset="utf-8">
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
+	<!-- Wichtig fuer Bootstrap -->
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="homepage">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB"
+	 crossorigin="anonymous">
+	<!-- Javascript -->
+	<script src="js/responsiveNav.js"></script>
+	<script src="js/index.js"></script>
+	<script src="js/header.js"></script>
+	<script src="js/ajax.js"></script>
+	<!-- Unsere CSS -->
+	<link rel="stylesheet" type="text/css" href="css/cookieNotification.css">
+	<link rel="stylesheet" type="text/css" href="css/navigation.css">
+	<link rel="stylesheet" type="text/css" href="css/header.css">
+	<link rel="stylesheet" type="text/css" href="css/pagelayout.css">
+	<link rel="stylesheet" type="text/css" href="css/index.css">
+	<!-- Lizenze Freie Bilder und Icons http://www.iconarchive.com/show/mono-general-2-icons-by-custom-icon-design/search-icon.html-->
+	<link rel="shortcut icon" type="image/x-icon" href="materials/icons/glyph.png">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp"
+	 crossorigin="anonymous">
+</head>
+
+<body onload="setMonthOnTopList();setRndBG();" onresize="setRndBG();">
+	<div id="container">
+		<div id="container-main">
+
+			<header>
+				<a id="headerTitle" onclick="toggleBG()"><span id="headerFirst">Sport</span><span id="headerLast">Journal</span></a>
+			</header>
+
+			<nav it-include-html="/navigation.html"></nav>
+
+			<section id="main">
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col-12 col-lg-9">
+							<div id="topBeitraege">
+								<h1 id="topText" onclick="setThisActive(this)">Vom</h1>
+									<?php
+									//generiere top beiträge
+									echo "<ul>";
+									if(count($topLM) == 0){
+										echo "<li><a><div class=\"beitragContainer noContent\"><h5><small><i class=\"fas fa-coffee\"></i></small> Hier scheint nichts zu sein...</h5></div></a></li>";
+									}else{
+										foreach($topLM as $zeile){
+											$autor = "Gelöscht";
+											if($zeile["lastname"] != "") $autor = $zeile["title"] . " " . $zeile["firstname"] . " " . $zeile["lastname"];
+											echo "<li>";
+											echo "<a href=\"/" . $zeile["webpath"] . "\">";
+											echo "<div class=\"beitragContainer\">";
+											echo "<div class=\"beitragTitle\"><h3>";
+											echo $zeile["name"];
+											echo "</h3></div><div class=\"beitragAutor\"><h4><small>";
+											echo $autor;
+											echo "</small></h4></div><div class=\"abstractTitle\"><h6>Abstract</h6></div><div class=\"beitragContent\"><p>";
+											echo $zeile["abstract"];
+											echo "</p></div></div></a></li>";
+										}
+										echo "<li><a><div class=\"beitragContainer noContent\"><h5><small><i class=\"fas fa-bed\"></i></small> Keine Beiträge mehr...</h5></div></a></li>";
+									}
+									echo "</ul>";
+									?>
+							</div>
+						</div>
+
+						<div class="col-12 col-lg-3">
+							<div id="aktuell">
+								<h1 id="aktuellText" onclick="setThisActive(this)">Aktuell</h1>
+								<?php
+									//generiere aktuelle beiträge
+									echo "<ul>";
+									if(count($aktuell) == 0){
+										echo "<li><a><div class=\"beitragContainer noContent\"><h5><small><i class=\"fas fa-coffee\"></i></small> Hier scheint nichts zu sein...</h5></div></a></li>";
+									}else{
+										foreach($aktuell as $zeile){
+											$autor = "Gelöscht";
+											if($zeile["lastname"] != "") $autor = $zeile["title"] . " " . $zeile["firstname"] . " " . $zeile["lastname"];
+											echo "<li>";
+											echo "<a href=\"/" . $zeile["webpath"] . "\">";
+											echo "<div class=\"beitragContainer\">";
+											echo "<div class=\"beitragTitle\"><h3>";
+											echo $zeile["name"];
+											echo "</h3></div><div class=\"beitragAutor\"><h4><small>";
+											echo $autor;
+											echo "</small></h4></div><div class=\"abstractTitle\"><h6>Abstract</h6></div><div class=\"beitragContent\"><p>";
+											echo $zeile["abstract"];
+											echo "</p></div></div></a></li>";
+										}
+										echo "<li><a><div class=\"beitragContainer noContent\"><h5><small><i class=\"fas fa-bed\"></i></small> Keine Beiträge mehr...</h5></div></a></li>";
+									}
+									echo "</ul>";
+									?>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+		</div>
+	</div>
+
+	<footer>
+		<div id="footer">
+			<a href="impressum.html">Impressum</a>
+			<a>-</a>
+			<a href="datenschutz.html">Datenschutz</a>
+		</div>
+
+	</footer>
+
+	<?php
+if (!isset($_COOKIE["disableCookieNotify"])) {
+    echo '<div id="cookieNotification">
+				<div id="cookieNotifyText">Wir verwenden Cookies. Für weitere informationen siehe unser <a href="datenschutz.html">Datenschutz</a>.</div>
+				<div id="cookieNotifyButton" >
+					<form action="/php/notifyCookie.php" method="post">
+						<input type=hidden name="acceptCookie" value="true">
+						<input id="cookieSubmit" type="submit" value="Akzeptieren">
+					</form>
+				</div>
+			</div>';
+}
+?>
+
+
+</body>
+<script>includeHTML();</script>
+</html>
