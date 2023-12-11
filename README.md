@@ -1,3 +1,28 @@
+# Features:
+
+## Hauptseite mit Feed:
+
+![](docs/main.gif)
+
+## Archiv Ansicht:
+
+![](docs/archiv.gif)
+
+## Login/Registrierung:
+
+![](docs/konto.gif)
+
+## Beitrag Erstellen:
+
+![](docs/beitrag.gif)
+
+## Nutzer Konto und Admin Verwaltung:
+
+![](docs/admin.gif)
+
+# Setup
+Mit XAMPP:
+
 1. httpd.conf ------------------------------------------------------------------------------------------
  - DocumentRoot Muss in ".../src/" sein
  - Directory direct unter DocumentRoot muss auch ".../src/" sein
